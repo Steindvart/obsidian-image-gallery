@@ -9,8 +9,11 @@ const getImagesList = (
   // retrieve a list of the files
 
   let files: TAbstractFile[] = []
+  const activeFilePath = app.workspace.getActiveFile().parent.path
 
   settings.targets.forEach((target: string) => {
+    target = target.replace(/(^\/?\.)|(^\.)/, `${activeFilePath}`);
+
     const file = app.vault.getAbstractFileByPath(target)
     if (file instanceof TFolder) {
       files.push(...file.children)
@@ -33,7 +36,6 @@ const getImagesList = (
       console.warn('The folder doesn\'t exist, or it\'s empty!')
     }
   }
-
 
   if (files.length === 0) {
     const error = 'The file list is empty!'
